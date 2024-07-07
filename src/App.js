@@ -1,11 +1,20 @@
 
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { useFieldArray, useForm, Controller } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';  
 import { getUsers } from './api/getUsers/getUsers';
-import { Autocomplete, TextField } from '@mui/material';
+
 import SocialMediaFields from './Components/SocialMediaFields/SocialMediaFields';
+import {
+  Autocomplete,
+  TextField
+} from '@mui/material';
+import {
+  Controller
+} from 'react-hook-form';
+
+
 
 function App() {
   const defaultValues = {
@@ -21,7 +30,7 @@ function App() {
     film: ''
   }
 
-  const [userResult, setUserResult] = useState(defaultValues);
+  const [_, setUserResult] = useState(defaultValues);
   const [apiUSerData, setApiUserData] = useState([]);
   const { register, control, handleSubmit, formState: {errors, isValid}, getValues, reset } = useForm(
     {
@@ -49,9 +58,6 @@ function App() {
   const getUsersItems = async () => {
     const result = await getUsers();
     if (!result.error) {
-
-
-
       setApiUserData(result);
       setUserResult({username: result.name, email: result.email, channel: result.website});
     } else {
@@ -147,41 +153,42 @@ function App() {
               )
             })
           }
-          <div className="controller-example">
-            <Controller 
-              name="film"  
-              control={control}
-              render={({field: {onChange, value}}) => {
-                return (
-                <Autocomplete 
 
-                  value={value.uuid}  // <--- MUST BE THE ID VALUE OF THE OBJECT
-                  options={apiUSerData} // <--- MUST BE AN ARRAY DATA TO CREATE THE LIST
-                  onChange={(e, data) => onChange(data)} // <--- MUST ADD SO WHEN A SELECTION IS MADE IT SETS THE SELECTION E.G. TRIGGER AN EVENT TO UPDATE USEFORM
-                  // filterOptions={(options) => options}  // <--- OPTIONAL --- THE OPTIONS LIST CAN BE FILTERED DEPENDING ON VALUES IN THE FORM OR OTHER LOGIC. 
-                  getOptionLabel={(option) => option.label || ''}   // <--- OPTIONAL --- This prop is a function that defines how the label for each option should be displayed in the dropdown list. It takes an option object as a parameter and returns the label to be displayed.
-
-                  renderOption={(props, option) => { // <--- MUST ADD SO THAT THE LIST THAT APPEARS IS CORRECT IN MARK-UP TERMS - WE'RE SAYING RENDER A LIST
-                    return (
-                      <li {...props} key={crypto.randomUUID()} role="list-box">
-                        {option.label}
-                      </li>
-                    );
-                  }}
-
-
-                  renderInput={(params) => {
-                  return (
-                    <TextField
-                      className="borderless-input"
-                      {...params} 
-                      label="usernames"
-                      onChange={(e) => e.target.value}
-                    />)}}
-                />)
-              }}
+          <div className="controller-example" >
+            <Controller
+              name = "film"
+              control = {control}
+              render = {
+                ({field: {onChange,value}}) => {
+                  return ( 
+                    <Autocomplete 
+                      value={value.uuid} // <--- MUST BE THE ID VALUE OF THE OBJECT
+                      options = {apiUSerData} // <--- MUST BE AN ARRAY DATA TO CREATE THE LIST
+                      onChange = {(e, data) => onChange(data)} // <--- MUST ADD SO WHEN A SELECTION IS MADE IT SETS THE SELECTION E.G. TRIGGER AN EVENT TO UPDATE USEFORM
+                      // // filterOptions={(options) => options}  // <--- OPTIONAL --- THE OPTIONS LIST CAN BE FILTERED DEPENDING ON VALUES IN THE FORM OR OTHER LOGIC. 
+                      // getOptionLabel = {(option) => option.label || ''} // <--- OPTIONAL --- This prop is a function that defines how the label for each option should be displayed in the dropdown list. It takes an option object as a parameter and returns the label to be displayed.
+                      renderOption = {
+                        (props, option) => { // <--- MUST ADD SO THAT THE LIST THAT APPEARS IS CORRECT IN MARK-UP TERMS - WE'RE SAYING RENDER A LIST
+                          return ( 
+                            <li {...props} key = {crypto.randomUUID()} role = "list-box" > {option.label} </li>
+                          );
+                        }
+                      }
+                      renderInput = {
+                        (params) => {
+                          return ( 
+                            <TextField className = "borderless-input" 
+                            {...params}
+                            label = "usernames"
+                            onChange = {(e) => e.target.value}
+                          />)}
+                        }
+                    />
+                  )    
+                }}
             />
           </div>
+
           <div>
             <button type="submit" disabled={!isValid}>Submit</button>
             <button type="button" onClick={() => resetFormField()}>Reset</button>
@@ -193,7 +200,5 @@ function App() {
     </>
   );
 }
-
-
 
 export default App;
