@@ -1,24 +1,28 @@
 
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, Controller } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';  
 import { getUsers } from './api/getUsers/getUsers';
+import { Autocomplete, TextField } from '@mui/material';
+import SocialMediaFields from './Components/SocialMediaFields/SocialMediaFields';
 
 function App() {
   const defaultValues = {
-    username: '',
-    email:'',
-    channel: '',
+    username: 'D',
+    email:'D@S.COM',
+    channel: 'SDS',
     dob: new Date(),
     social: [{
       id: `${crypto.randomUUID()}`,
-      name: '',
-      url: ''
-    }]
+      name: 'SD',
+      url: 'SDS'
+    }],
+    film: ''
   }
 
   const [userResult, setUserResult] = useState(defaultValues);
+  const [apiUSerData, setApiUserData] = useState([]);
   const { register, control, handleSubmit, formState: {errors, isValid}, getValues, reset } = useForm(
     {
       defaultValues,
@@ -26,18 +30,15 @@ function App() {
     }
   );
 
-console.log('errors =====         ===== ', errors);
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'social'
   })
 
-
   useEffect(() => {
-    console.log('errors =====         ===== ', errors);
     (async () => {await getUsersItems()})();
 
-  }, []);
+  }, [errors]);
 
   const onSubmit = (data) => {
     const getVals = getValues('social')
@@ -46,8 +47,12 @@ console.log('errors =====         ===== ', errors);
   }
 
   const getUsersItems = async () => {
-    const result = await getUsers(1);
+    const result = await getUsers();
     if (!result.error) {
+
+
+
+      setApiUserData(result);
       setUserResult({username: result.name, email: result.email, channel: result.website});
     } else {
       console.log('error', result.error);
@@ -127,8 +132,6 @@ console.log('errors =====         ===== ', errors);
               })} />
             <p className="error-message">{errors?.dob?.message}</p>
           </div>
-
-          
           <h2>Social Media</h2>
           {
             fields.map((fields, index) => { 
@@ -144,6 +147,41 @@ console.log('errors =====         ===== ', errors);
               )
             })
           }
+          <div className="controller-example">
+            <Controller 
+              name="film"  
+              control={control}
+              render={({field: {onChange, value}}) => {
+                return (
+                <Autocomplete 
+
+                  value={value.uuid}  // <--- MUST BE THE ID VALUE OF THE OBJECT
+                  options={apiUSerData} // <--- MUST BE AN ARRAY DATA TO CREATE THE LIST
+                  onChange={(e, data) => onChange(data)} // <--- MUST ADD SO WHEN A SELECTION IS MADE IT SETS THE SELECTION E.G. TRIGGER AN EVENT TO UPDATE USEFORM
+                  // filterOptions={(options) => options}  // <--- OPTIONAL --- THE OPTIONS LIST CAN BE FILTERED DEPENDING ON VALUES IN THE FORM OR OTHER LOGIC. 
+                  getOptionLabel={(option) => option.label || ''}   // <--- OPTIONAL --- This prop is a function that defines how the label for each option should be displayed in the dropdown list. It takes an option object as a parameter and returns the label to be displayed.
+
+                  renderOption={(props, option) => { // <--- MUST ADD SO THAT THE LIST THAT APPEARS IS CORRECT IN MARK-UP TERMS - WE'RE SAYING RENDER A LIST
+                    return (
+                      <li {...props} key={crypto.randomUUID()} role="list-box">
+                        {option.label}
+                      </li>
+                    );
+                  }}
+
+
+                  renderInput={(params) => {
+                  return (
+                    <TextField
+                      className="borderless-input"
+                      {...params} 
+                      label="usernames"
+                      onChange={(e) => e.target.value}
+                    />)}}
+                />)
+              }}
+            />
+          </div>
           <div>
             <button type="submit" disabled={!isValid}>Submit</button>
             <button type="button" onClick={() => resetFormField()}>Reset</button>
@@ -156,40 +194,6 @@ console.log('errors =====         ===== ', errors);
   );
 }
 
-const SocialMediaFields = ({fields, register, errors, index, deleteSocialMediaFields, addSocialMediaFields}) => {
-  const socialMediaNameField = `social.${index}.name`;
-  const socialMediaUrlField = `social.${index}.url`;
-  return (
-    <div key={fields.id} className="social-media-fields">
-      <div>
-        <h3>{`Social media Entry ${index }`}</h3>
-        <div>
-          <label htmlFor="channel">Social Media name:</label>
-            <input type="text" id={socialMediaNameField} name={socialMediaNameField} {...register(socialMediaNameField,{
-              required:{
-                value: true,
-                message: 'Media name is required'
-              } 
-            })} />
-            <p className="error-message">{errors?.social?.[index].name?.message}</p>
-        </div>
-        <div>
-          <label htmlFor="channel">Social Media Url:</label>
-            <input type="text" id={socialMediaUrlField} name={socialMediaUrlField} {...register(socialMediaUrlField,{
-              required:{
-                value: true,
-                message: 'Media url is required'
-              } 
-            })} />
-          <p className="error-message">{errors?.social?.[index].url?.message}</p>
-        </div>
-      </div>
-      <div className="social-media-buttons">
-        <button type="button" onClick={() => addSocialMediaFields(index)}>Add</button>
-        {index !== 0 && (<button type="button" onClick={() => deleteSocialMediaFields(index)}>Delete</button>)}
-      </div>
-    </div>
-  )
-}
+
 
 export default App;
