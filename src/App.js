@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';  
 import { getUsers } from './api/getUsers/getUsers';
+import { getFilms } from './api/getFilms/getFilms';
 
 import SocialMediaFields from './Components/SocialMediaFields/SocialMediaFields';
 import {
@@ -32,6 +33,7 @@ function App() {
 
   const [_, setUserResult] = useState(defaultValues);
   const [apiUSerData, setApiUserData] = useState([]);
+  const [films, setFilms] = useState([]);
   const { register, control, handleSubmit, formState: {errors, isValid}, getValues, reset } = useForm(
     {
       defaultValues,
@@ -45,7 +47,12 @@ function App() {
   })
 
   useEffect(() => {
-    (async () => {await getUsersItems()})();
+    (async () => {
+      await getUsersItems()
+      await getFilmsList();
+    })();
+
+    console.log('errors ======== ', errors);
 
   }, [errors]);
 
@@ -65,11 +72,18 @@ function App() {
     }
   }
 
+  const getFilmsList = async () => {
+    const result = await getFilms();
+    if (!result.error) {
+      setFilms(result);
+    } else {
+      console.log('error', result.error);
+    }
+  }
 
   const resetFormField = () => {
     reset();
   }
-
 
   const deleteSocialMediaFields = (index) => {
     remove(index)
@@ -163,7 +177,7 @@ function App() {
                   return ( 
                     <Autocomplete 
                       value={value.uuid} // <--- MUST BE THE ID VALUE OF THE OBJECT
-                      options = {apiUSerData} // <--- MUST BE AN ARRAY DATA TO CREATE THE LIST
+                      options = {films} // <--- MUST BE AN ARRAY DATA TO CREATE THE LIST
                       onChange = {(e, data) => onChange(data)} // <--- MUST ADD SO WHEN A SELECTION IS MADE IT SETS THE SELECTION E.G. TRIGGER AN EVENT TO UPDATE USEFORM
                       // // filterOptions={(options) => options}  // <--- OPTIONAL --- THE OPTIONS LIST CAN BE FILTERED DEPENDING ON VALUES IN THE FORM OR OTHER LOGIC. 
                       // getOptionLabel = {(option) => option.label || ''} // <--- OPTIONAL --- This prop is a function that defines how the label for each option should be displayed in the dropdown list. It takes an option object as a parameter and returns the label to be displayed.
