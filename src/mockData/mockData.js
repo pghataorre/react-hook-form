@@ -501,3 +501,81 @@ export const result = { data: [
       "uuid": "56789abcdef0123456789abcdef01234"
     }
 ]};
+
+export const mockOrderedFilms = [
+  {
+    label: '12 Angry Men',
+    year: 1957,
+    uuid: 'd5e6f78a-9bcd-ef01-2345-6789abcdef0'
+  },
+  {
+    label: 'Fight Club',
+    year: 1999,
+    uuid: 'bcdef012-3456-789a-bcde-f0123456789a'
+  },
+  {
+    label: 'Forrest Gump',
+    year: 1994,
+    uuid: 'ef012345-6789-abcd-ef01-23456789abcd'
+  },
+  {
+    label: 'Inception',
+    year: 2010,
+    uuid: 'f0123456-789a-bcde-f012-3456789abcde'
+  },
+  {
+    label: 'Pulp Fiction',
+    year: 1994,
+    uuid: 'f78a9bcd-ef01-2345-6789-abcdef01234'
+  },
+  {
+    label: "Schindler's List",
+    year: 1993,
+    uuid: 'e6f78a9b-cdef-0123-4567-89abcdef012'
+  },
+  {
+    label: 'Star Wars: Episode V - The Empire Strikes Back',
+    year: 1980,
+    uuid: 'def01234-5678-9abc-def0-123456789abc'
+  },
+  {
+    label: 'The Dark Knight',
+    year: 2008,
+    uuid: 'c4d5e6f7-8a9b-cdef-0123-456789abcde'
+  },
+  {
+    label: 'The Godfather',
+    year: 1972,
+    uuid: 'a2b3c4d5-e6f7-8a9b-cdef-0123456789ab'
+  },
+  {
+    label: 'The Godfather: Part II',
+    year: 1974,
+    uuid: 'b3c4d5e6-f78a-9bcd-ef01-23456789abc'
+  },
+  {
+    label: 'The Good, the Bad and the Ugly',
+    year: 1966,
+    uuid: '9bcdef01-2345-6789-abcd-ef0123456789'
+  },
+  {
+    label: 'The Lord of the Rings: The Fellowship of the Ring',
+    year: 2001,
+    uuid: 'cdef0123-4567-89ab-cdef-0123456789ab'
+  },
+  {
+    label: 'The Lord of the Rings: The Return of the King',
+    year: 2003,
+    uuid: '8a9bcdef-0123-4567-89ab-cdef0123456'
+  },
+  {
+    label: 'The Lord of the Rings: The Two Towers',
+    year: 2002,
+    uuid: '0123456789abcdef0123456789abcdef'
+  },
+  {
+    label: 'The Shawshank Redemption',
+    year: 1994,
+    uuid: '8b1a8c3e-5d7a-4e8d-9b8c-6e8d5d7a4e8d'
+  }
+]
