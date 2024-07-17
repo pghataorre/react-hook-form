@@ -69,7 +69,7 @@ test("MOCKING A FUNCTION USING mockImplementation()", () => {
   console.log("mockFetch:", mockFetch);
 
   // fetch is a global function in the browser, that fetches resources from the server.
-  // Have impleted a mock fetch function that returns with the .mockImplementation() method.
+  // Have implemented a mock fetch function that returns with the .mockImplementation() method.
   // .mockImplementation() Really says it will override the real use of function an run the callback function .mockImplementation(() => 2 + 4)
   // It will now run 2 + 4 instead of fetching resources from the server.
   // The result is 6
